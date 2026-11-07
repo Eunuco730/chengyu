@@ -14,6 +14,9 @@
         .menu-grid { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
         button { width: 100%; background: var(--btn-bg); color: #fff; border: none; padding: 15px; font-size: 1.1rem; border-radius: 12px; font-weight: bold; cursor: pointer; }
         .grade-box { font-size: 0.8rem; color: #666; margin: 10px 0; padding: 10px; background: #f9f9f9; border-radius: 10px; }
+        /* 题目计数样式：红色，数字使用新罗马字体加粗 */
+        .progress-count { font-size: 1rem; color: #e74c3c; margin-bottom: 10px; font-weight: bold; }
+        .progress-count span { font-family: "Times New Roman", Times, serif; font-weight: bold; }
         .question { font-size: 1.15rem; font-weight: bold; margin: 20px 0; word-break: break-all; text-align: left; line-height: 1.5; max-height: 250px; overflow-y: auto; padding-right: 5px; }
         input { width: 100%; font-size: 1.5rem; padding: 15px; border: 3px solid #eee; border-radius: 12px; text-align: center; margin-bottom: 10px; }
         #answer-display { color: var(--wrong); font-weight: bold; min-height: 30px; margin-bottom: 10px; visibility: hidden; }
@@ -49,6 +52,8 @@
     <button class="btn-exit" onclick="location.reload()">退出</button>
     <div id="timer" style="margin-top:30px; font-weight:bold;">00:00</div>
     <div class="grade-box" id="grade-standards"></div>
+    <!-- 题目计数显示位置 -->
+    <div class="progress-count">第 <span id="current-num">1</span> / <span id="total-num">10</span> 题</div>
     <div class="question" id="q-val">--</div>
     <div id="answer-display">正确成语: <span id="hint-val"></span></div>
     <input type="text" id="answer-input" placeholder="输入成语" autocomplete="off">
@@ -308,7 +313,7 @@
         {p: "呼吸相关联，比喻关系极为密切。强调“相互关联、彼此影响”，适用范围最广。【中性】", a: "息息相关"},
         {p: "千丝，万根线。比喻彼此之间关系复杂、联系密切。强调“联系复杂繁多、牵连深”，比“息息相关”更强调“多而密”。【中性】", a: "千丝万缕"},
         {p: "感情深厚，舍不得分离。强调“人的情感上的不舍”，多用于人际关系。【褒义】", a: "难舍难分"},
-        {p: "水和乳汁融合在一起。比喻关系非常融洽，结合紧密。强调“融为一体、和谐无间”，侧重于“融合的深度”。【褒义】", a: "水乳交融"},
+        {p: "水和乳汁融合在一起。比喻关系非常融洽，结合紧密。强调“融为一体、和谐无间”,侧重于“融合的深度”。【褒义】", a: "水乳交融"},
         {p: "按照身材剪裁衣服。比喻根据实际情况办事。强调“因地制宜、因事制宜”。【褒义】", a: "量体裁衣"},
         {p: "抽丝，剥茧。比喻层层深入地分析、理清头绪。强调“逐步深入、细致分析”。【褒义】", a: "抽丝剥茧"},
         {p: "比喻事业蓬勃发展、场面热烈活跃、人或社会充满生机与活力。“龙腾虎跃的干劲”【褒义】", a: "龙腾虎跃"},
@@ -912,6 +917,10 @@
     function render() {
         if(cur >= quiz.length) return finish();
         document.getElementById('answer-display').style.visibility = 'hidden';
+        // 更新当前题号与总题数
+        document.getElementById('current-num').innerText = cur + 1;
+        document.getElementById('total-num').innerText = quiz.length;
+        
         document.getElementById('q-val').innerText = quiz[cur].p;
         document.getElementById('hint-val').innerText = quiz[cur].a;
         document.getElementById('answer-input').value = '';
